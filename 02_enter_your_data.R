@@ -1,51 +1,59 @@
 # ============================================================
-# STEP 2: Enter Your Research Data Here
-# Edit this file with YOUR actual data before running analysis
+# STEP 2: Load Data from CSV Files
 # ============================================================
 
-# ----------------------------------------------------------------
-# OPTION A: Enter data manually (edit the numbers below)
-# ----------------------------------------------------------------
+# Helper function: reads a CSV with 3 reading columns and reshapes
+# to the long format (Treatment, Replication, Value) required by the analysis
+load_data <- function(file_path, label) {
+  raw <- read.csv(file_path, check.names = FALSE, stringsAsFactors = FALSE)
+  # Remove rows with empty sample names
+  raw <- raw[!is.na(raw[[1]]) & trimws(raw[[1]]) != "", ]
+  # Remove rows where Reading 1 is missing
+  raw <- raw[trimws(as.character(raw[[2]])) != "" & !is.na(raw[[2]]), ]
 
-# Example: Experiment with 3 Treatments and 3 Replications
-# Replace these numbers with YOUR data
+  n <- nrow(raw)
+  df <- data.frame(
+    Treatment   = rep(trimws(raw[[1]]), each = 3),
+    Replication = rep(1:3, times = n),
+    Value       = suppressWarnings(
+                    as.numeric(c(rbind(raw[[2]], raw[[3]], raw[[4]])))
+                  )
+  )
+  # Drop rows where a reading was missing (NA)
+  df <- df[!is.na(df$Value), ]
 
-# Treatment names (change as needed)
-treatments <- c("T1", "T2", "T3", "T4")
+  cat(sprintf("  %-35s -> %d treatments, %d observations\n",
+              label, n, nrow(df)))
+  return(df)
+}
 
-# Your observed values for each treatment (each row = one replication)
-# Format: each treatment gets its own vector of values
-T1 <- c(25.3, 26.1, 24.8, 25.9)   # Replace with your T1 values
-T2 <- c(30.2, 31.5, 29.8, 30.9)   # Replace with your T2 values
-T3 <- c(22.1, 21.8, 23.0, 22.5)   # Replace with your T3 values
-T4 <- c(35.0, 34.5, 36.1, 35.4)   # Replace with your T4 values
+cat("Loading datasets from data/ folder...\n\n")
 
-# Number of replications
-replications <- 4
+moisture_data  <- load_data("data/moisture content-Moisture Content (%).csv",  "Moisture Content (%)")
+protein_data   <- load_data("data/protein content-Protein Content (%).csv",    "Protein Content (%)")
+fat_data       <- load_data("data/Fat content-Fat Content (%).csv",            "Fat Content (%)")
+ash_data       <- load_data("data/ash content-Ash Content (%).csv",            "Ash Content (%)")
+fibre_data     <- load_data("data/Crude Fibre-Crude Fibre (%).csv",            "Crude Fibre (%)")
+flavonoid_data <- load_data("data/flavonoid-Table 1.csv",                      "Flavonoid")
 
-# Build the data frame (do not change this part)
-data <- data.frame(
-  Treatment = rep(treatments, each = replications),
-  Replication = rep(1:replications, times = length(treatments)),
-  Value = c(T1, T2, T3, T4)
-)
-
-# ----------------------------------------------------------------
-# OPTION B: Load from CSV file (uncomment if using a file)
-# ----------------------------------------------------------------
-# Put your CSV file in the Research_Analysis folder, then:
-# data <- read.csv("your_data.csv")
-
-# ----------------------------------------------------------------
-# OPTION C: Load from Excel file (uncomment if using Excel)
-# ----------------------------------------------------------------
-# library(readxl)
-# data <- read_excel("your_data.xlsx", sheet = 1)
+cat("\n")
 
 # ----------------------------------------------------------------
-# View your data to confirm it looks correct
+# SELECT WHICH DATASET TO ANALYZE
+# Uncomment ONE line below to choose which parameter to analyze.
+# Run this file again after changing the selection.
 # ----------------------------------------------------------------
-cat("Your data:\n")
+data <- moisture_data    # Moisture Content (%)
+# data <- protein_data   # Protein Content (%)
+# data <- fat_data       # Fat Content (%)
+# data <- ash_data       # Ash Content (%)
+# data <- fibre_data     # Crude Fibre (%)
+# data <- flavonoid_data # Flavonoid
+
+# ----------------------------------------------------------------
+# View selected data to confirm it looks correct
+# ----------------------------------------------------------------
+cat("Selected data:\n")
 print(data)
 
 cat("\nData summary:\n")
