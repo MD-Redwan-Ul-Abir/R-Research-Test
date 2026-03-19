@@ -1,0 +1,56 @@
+=================================================================
+    DIETARY FIBRE (% dry basis) — LSD & CV ANALYSIS
+=================================================================
+
+---------------------------------------------------------------
+ANOVA TABLE
+---------------------------------------------------------------
+
+            Df Sum Sq Mean Sq F value Pr(>F)    
+Treatment    7  473.4   67.63 1183.63 <2e-16 ***
+Rep          2    0.1    0.04    0.65  0.537    
+Residuals   14    0.8    0.06                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+F-value (Treatment) = 1183.6256
+p-value (Treatment) = 0.0000
+MS Error            = 0.057134
+df Error            = 14
+
+Result: SIGNIFICANT (p < 0.05)
+
+---------------------------------------------------------------
+CV & GRAND MEAN
+---------------------------------------------------------------
+
+Grand Mean = 20.4854
+CV (%)    = 1.17
+
+---------------------------------------------------------------
+LSD TEST (5%)
+---------------------------------------------------------------
+
+LSD Value (5%) = 0.4186
+
+Treatment Means with LSD Grouping:
+
+Sample                                                     Mean  Group
+----------------------------------------------------------------------
+Colocasia esculenta ( Shada Shula kochu )               25.8400  a
+Alocasia esculenta ( buno kochu )                       23.8333  b
+Xanthosoma sagittifolium ( chini  kochu )               23.7667  b
+Alocasia fornicata ( bish kochu )                       22.8967  c
+Colocasia esculenta var. globulifera( Mukhi kochu )     20.4700  d
+Colocasia esculenta (L.) Schott ( Kalo Shula kochu )    20.1500  d
+Amorphophallus  paeonifolius ( Ol kochu )               14.6033  e
+Alocasia macrorrhizos ( Maan kochu )                    12.3233  f
+----------------------------------------------------------------------
+
+---------------------------------------------------------------
+SUMMARY
+---------------------------------------------------------------
+
+Grand Mean : 20.4854
+LSD (5%)   : 0.4186
+CV (%)     : 1.17

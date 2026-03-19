@@ -1,0 +1,56 @@
+=================================================================
+    PHENOLIC CONTENT (microgram/g) — LSD & CV ANALYSIS
+=================================================================
+
+---------------------------------------------------------------
+ANOVA TABLE
+---------------------------------------------------------------
+
+            Df Sum Sq Mean Sq   F value Pr(>F)    
+Treatment    7  31528    4504 16133.039 <2e-16 ***
+Rep          2      0       0     0.481  0.628    
+Residuals   14      4       0                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+F-value (Treatment) = 16133.0389
+p-value (Treatment) = 0.0000
+MS Error            = 0.279183
+df Error            = 14
+
+Result: SIGNIFICANT (p < 0.05)
+
+---------------------------------------------------------------
+CV & GRAND MEAN
+---------------------------------------------------------------
+
+Grand Mean = 86.1130
+CV (%)    = 0.61
+
+---------------------------------------------------------------
+LSD TEST (5%)
+---------------------------------------------------------------
+
+LSD Value (5%) = 0.9253
+
+Treatment Means with LSD Grouping:
+
+Sample                                                     Mean  Group
+----------------------------------------------------------------------
+Colocasia esculenta ( Shada Shula kochu )              156.9826  a
+Alocasia esculenta ( buno kochu )                      109.2780  b
+Alocasia fornicata ( bish kochu )                       98.6786  c
+Colocasia esculenta (L.) Schott ( Kalo Shula kochu )    93.8737  d
+Colocasia esculenta var. globulifera( Mukhi kochu )     72.9169  e
+Xanthosoma sagittifolium ( chini  kochu )               67.5909  f
+Alocasia macrorrhizos ( Maan kochu )                    64.7936  g
+Amorphophallus  paeonifolius ( Ol kochu )               24.7898  h
+----------------------------------------------------------------------
+
+---------------------------------------------------------------
+SUMMARY
+---------------------------------------------------------------
+
+Grand Mean : 86.1130
+LSD (5%)   : 0.9253
+CV (%)     : 0.61

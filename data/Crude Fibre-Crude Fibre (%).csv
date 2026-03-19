@@ -1,7 +1,9 @@
-Sample ,Reading 1,Reading 2,Reading 3,Mean,SD
-Alocasia macrorhiza ( Maan kochu ) ,1.39,1.45,1.41,1.42,0.0306
-Amorphallus campanulas ( Ol kochu ),1.60,1.71,1.67,1.66,0.0557
-Xanthosoma nigra ( Kalo Shula kochu ),1.33,1.38,1.31,1.34,0.0361
-Xanthosoma sagittifolium ( Shada Shula kochu ),1.56,1.59,1.64,1.60,0.0404
-Colocasia esculenta ( Aduri kochu ),1.13,1.23,1.21,1.19,0.0529
-Colocasia esculenta var. globulifera( Mukhi kochu ),1.29,1.27,1.29,1.28,0.0115
+Sample ,Reading 1,Reading 2,Reading 3,Mean,
+Alocasia macrorrhizos ( Maan kochu ) ,1.39,1.45,1.41,1.42,
+Amorphophallus  paeonifolius ( Ol kochu ),1.60,1.71,1.67,1.66,
+Colocasia esculenta (L.) Schott ( Kalo Shula kochu ),1.33,3.46,4.28,3.02,
+Colocasia esculenta ( Shada Shula kochu ),1.56,2.96,4.95,3.16,
+Xanthosoma sagittifolium ( chini  kochu ),1.13,2.78,4.90,2.94,
+Colocasia esculenta var. globulifera( Mukhi kochu ),1.29,1.27,1.29,1.28,
+Alocasia fornicata ( bish kochu ),2.96,4.13,2.97,3.35,
+Alocasia esculenta ( buno kochu ),3.10,3.97,3.67,3.58,
