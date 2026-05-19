@@ -27,28 +27,46 @@ load_data <- function(file_path, label) {
   return(df)
 }
 
-cat("Loading datasets from data/ folder...\n\n")
+cat("Automatically scanning data/ folder for datasets...\n\n")
 
-moisture_data  <- load_data("data/moisture content-Moisture Content (%).csv",  "Moisture Content (%)")
-protein_data   <- load_data("data/protein content-Protein Content (%).csv",    "Protein Content (%)")
-fat_data       <- load_data("data/Fat content-Fat Content (%).csv",            "Fat Content (%)")
-ash_data       <- load_data("data/ash content-Ash Content (%).csv",            "Ash Content (%)")
-fibre_data     <- load_data("data/Crude Fibre-Crude Fibre (%).csv",            "Crude Fibre (%)")
-flavonoid_data <- load_data("data/flavonoid-Table 1.csv",                      "Flavonoid")
+# List all CSV files in the data folder
+csv_files <- list.files("data", pattern = "\\.csv$", full.names = TRUE)
 
-cat("\n")
+# Create a list to store all datasets
+datasets <- list()
+
+for (f in csv_files) {
+    # Generate a clean label from the filename (e.g., "AVERAGE NO OF...")
+    file_label <- sub("-Table 1\\.csv$", "", basename(f))
+    file_label <- sub("\\.csv$", "", file_label)
+    
+    # Load the data using the smart detector
+    cat(sprintf("Loading: %s\n", basename(f)))
+    datasets[[file_label]] <- load_data(f, file_label)
+}
+
+cat("\nAll datasets loaded successfully!\n")
 
 # ----------------------------------------------------------------
 # SELECT WHICH DATASET TO ANALYZE
-# Uncomment ONE line below to choose which parameter to analyze.
-# Run this file again after changing the selection.
+# To change the dataset, simply change the name inside the brackets ["..."]
 # ----------------------------------------------------------------
-data <- moisture_data    # Moisture Content (%)
-# data <- protein_data   # Protein Content (%)
-# data <- fat_data       # Fat Content (%)
-# data <- ash_data       # Ash Content (%)
-# data <- fibre_data     # Crude Fibre (%)
-# data <- flavonoid_data # Flavonoid
+cat("Available datasets:\n")
+print(names(datasets))
+
+# By default, we select the first one found
+selected_name <- names(datasets)[1] 
+data <- datasets[[selected_name]]
+
+# ----------------------------------------------------------------
+# View selected data
+# ----------------------------------------------------------------
+cat(sprintf("\n--- Selected for Analysis: %s ---\n", selected_name))
+
+cat("\nData summary:\n")
+print(summary(data))
+
+cat("\nNow you can run 03_full_analysis.R\n")
 
 # ----------------------------------------------------------------
 # View selected data to confirm it looks correct

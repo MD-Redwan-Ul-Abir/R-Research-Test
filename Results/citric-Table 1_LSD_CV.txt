@@ -1,22 +1,22 @@
 =================================================================
-    PROTEIN CONTENT (%) — LSD & CV ANALYSIS
+    CITRIC — LSD & CV ANALYSIS
 =================================================================
 
 ---------------------------------------------------------------
 ANOVA TABLE
 ---------------------------------------------------------------
 
-            Df Sum Sq Mean Sq  F value  Pr(>F)    
-Treatment    7  69.56   9.937 1144.381 < 2e-16 ***
-Rep          2   0.12   0.061    6.969 0.00793 ** 
-Residuals   14   0.12   0.009                     
+            Df Sum Sq Mean Sq F value   Pr(>F)    
+Treatment    5 103.42  20.684 461.189 1.75e-11 ***
+Rep          2   0.08   0.042   0.944    0.421    
+Residuals   10   0.45   0.045                     
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-F-value (Treatment) = 1144.3811
+F-value (Treatment) = 461.1891
 p-value (Treatment) = 0.0000
-MS Error            = 0.008683
-df Error            = 14
+MS Error            = 0.044850
+df Error            = 10
 
 Result: SIGNIFICANT (p < 0.05)
 
@@ -24,33 +24,31 @@ Result: SIGNIFICANT (p < 0.05)
 CV & GRAND MEAN
 ---------------------------------------------------------------
 
-Grand Mean = 9.6771
-CV (%)    = 0.96
+Grand Mean = 4.2150
+CV (%)    = 5.02
 
 ---------------------------------------------------------------
 LSD TEST (5%)
 ---------------------------------------------------------------
 
-LSD Value (5%) = 0.1632
+LSD Value (5%) = 0.3853
 
 Treatment Means with LSD Grouping:
 
 Sample                                                     Mean  Group
 ----------------------------------------------------------------------
-Colocasia esculenta var. globulifera( Mukhi kochu )     11.7100  a
-Xanthosoma sagittifolium ( chini  kochu )               11.0367  b
-Amorphophallus  paeonifolius ( Ol kochu )               11.0300  b
-Alocasia macrorrhizos ( Maan kochu )                    10.4200  c
-Colocasia esculenta ( Shada Shula kochu )               10.1000  d
-Colocasia esculenta (L.) Schott ( Kalo Shula kochu )     9.0967  e
-Alocasia fornicata ( bish kochu )                        7.2333  f
-Alocasia esculenta ( buno kochu )                        6.7900  g
+C.grandis                                                7.2267  a
+C.aurantifolia                                           6.6567  b
+C.macroptera                                             5.3967  c
+C.medica                                                 3.4767  d
+C.reticulata                                             1.5067  e
+C.sinensis                                               1.0267  f
 ----------------------------------------------------------------------
 
 ---------------------------------------------------------------
 SUMMARY
 ---------------------------------------------------------------
 
-Grand Mean : 9.6771
-LSD (5%)   : 0.1632
-CV (%)     : 0.96
+Grand Mean : 4.2150
+LSD (5%)   : 0.3853
+CV (%)     : 5.02

@@ -9,67 +9,79 @@ library(agricolae)
 
 dir.create("Results", showWarnings = FALSE)
 
-# ── File list ────────────────────────────────────────────────
-files <- list(
-  list(csv  = "data/protein content-Protein Content (%).csv",
-       title = "PROTEIN CONTENT (%)",
-       out   = "Results/Protein_Content_LSD_CV.txt"),
-
-  list(csv  = "data/ash content-Ash Content (%).csv",
-       title = "ASH CONTENT (%)",
-       out   = "Results/Ash_Content_LSD_CV.txt"),
-
-  list(csv  = "data/moisture content-Moisture Content (%).csv",
-       title = "MOISTURE CONTENT (%)",
-       out   = "Results/Moisture_Content_LSD_CV.txt"),
-
-  list(csv  = "data/Fat content-Fat Content (%).csv",
-       title = "FAT CONTENT (%)",
-       out   = "Results/Fat_Content_LSD_CV.txt"),
-
-  list(csv  = "data/Crude Fibre-Crude Fibre (%).csv",
-       title = "CRUDE FIBRE (%)",
-       out   = "Results/Crude_Fibre_LSD_CV.txt"),
-
-  list(csv  = "data/Dietary Fibre-D. Fibre (%) dry basis.csv",
-       title = "DIETARY FIBRE (% dry basis)",
-       out   = "Results/Dietary_Fibre_LSD_CV.txt"),
-
-  list(csv  = "data/carbohydrate-1-Carbohydrate Content.csv",
-       title = "CARBOHYDRATE CONTENT",
-       out   = "Results/Carbohydrate_Content_LSD_CV.txt"),
-
-  list(csv  = "data/Antioxidant-Ic 50 ( micro gram ml ).csv",
-       title = "ANTIOXIDANT IC50 (microgram/ml)",
-       out   = "Results/Antioxidant_IC50_LSD_CV.txt"),
-
-  list(csv  = "data/flavonoid-Micro gram gram.csv",
-       title = "FLAVONOID CONTENT (microgram/g)",
-       out   = "Results/Flavonoid_Content_LSD_CV.txt"),
-
-  list(csv  = "data/phenolic -Phenolic content microgram gram.csv",
-       title = "PHENOLIC CONTENT (microgram/g)",
-       out   = "Results/Phenolic_Content_LSD_CV.txt")
-)
-
 # ── Analysis function ────────────────────────────────────────
 run_analysis <- function(csv_path, title, out_path) {
 
-  raw <- read.csv(csv_path, check.names = FALSE, stringsAsFactors = FALSE)
+  # Read the whole file to find "Treatment"
+  raw_all <- read.csv(csv_path, header = FALSE, check.names = FALSE, stringsAsFactors = FALSE)
+  
+  # Find "Treatment" or "Sample" or "T1"
+  coords <- which(apply(raw_all, 1:2, function(x) grepl("^(Treatment|Sample)$", trimws(x), ignore.case = TRUE)), arr.ind = TRUE)
+  
+  if (nrow(coords) == 0) {
+    # Try finding something that looks like T1
+    coords <- which(apply(raw_all, 1:2, function(x) grepl("^T1$", trimws(x), ignore.case = TRUE)), arr.ind = TRUE)
+    if (nrow(coords) == 0) {
+       # Look for DAT columns
+       dat_coords <- which(apply(raw_all, 1:2, function(x) grepl("DAT", trimws(x), ignore.case = TRUE)), arr.ind = TRUE)
+       if (nrow(dat_coords) > 0) {
+           row_start <- dat_coords[1, 1]
+           col_start <- which(raw_all[row_start + 1, ] != "" & !is.na(raw_all[row_start + 1, ]))[1]
+       } else {
+           cat(sprintf("[ERROR] Could not find 'Treatment' or 'DAT' in %s. Skipping.\n", title))
+           return(NULL)
+       }
+    } else {
+        row_start <- coords[1, 1] - 1
+        col_start <- coords[1, 2]
+    }
+  } else {
+    row_start <- coords[1, 1]
+    col_start <- coords[1, 2]
+  }
 
-  # Drop blank rows
-  raw <- raw[!is.na(raw[, 1]) & trimws(raw[, 1]) != "", ]
+  headers <- as.character(raw_all[row_start, ])
+  col_mean <- which(grepl("^Mean$", trimws(headers), ignore.case = TRUE))
+  
+  if (length(col_mean) > 0) {
+    reading_cols <- (col_start + 1):(col_mean[1] - 1)
+  } else {
+    # Find numeric columns following Treatment
+    idx <- col_start + 1
+    while(idx <= ncol(raw_all) && any(!is.na(suppressWarnings(as.numeric(as.character(raw_all[(row_start+1):nrow(raw_all), idx])))))) {
+        idx <- idx + 1
+    }
+    reading_cols <- (col_start + 1):(idx - 1)
+  }
 
-  sample_names <- trimws(raw[, 1])
+  data_rows <- raw_all[(row_start + 1):nrow(raw_all), ]
+  data_rows <- data_rows[trimws(as.character(data_rows[, col_start])) != "" & !is.na(data_rows[, col_start]), ]
 
-  # Use columns 2,3,4 for the three readings (robust to header name differences)
-  df <- data.frame(
-    Treatment = factor(rep(sample_names, each = 3)),
-    Rep       = factor(rep(c("R1", "R2", "R3"), times = nrow(raw))),
-    Value     = c(rbind(as.numeric(raw[, 2]),
-                        as.numeric(raw[, 3]),
-                        as.numeric(raw[, 4])))
-  )
+  res_list <- list()
+  for (i in 1:nrow(data_rows)) {
+    trt <- trimws(as.character(data_rows[i, col_start]))
+    for (j in seq_along(reading_cols)) {
+      val <- as.numeric(as.character(data_rows[i, reading_cols[j]]))
+      if (!is.na(val)) {
+        res_list[[length(res_list) + 1]] <- data.frame(
+          Treatment = trt,
+          Rep = paste0("R", j),
+          Value = val,
+          stringsAsFactors = FALSE
+        )
+      }
+    }
+  }
+  df <- do.call(rbind, res_list)
+  df$Treatment <- factor(df$Treatment)
+  df$Rep <- factor(df$Rep)
+
+  # Check if we have enough treatments for ANOVA
+  if (length(unique(df$Treatment)) < 2) {
+    cat(sprintf("[SKIP] %s: Not enough treatments (found %d).\n", 
+                title, length(unique(df$Treatment))))
+    return(NULL)
+  }
 
   # ── ANOVA ────────────────────────────────────────────────
   model      <- aov(Value ~ Treatment + Rep, data = df)
@@ -148,11 +160,29 @@ run_analysis <- function(csv_path, title, out_path) {
               title, grand_mean, lsd_value, cv_percent))
 }
 
-# ── Run all ──────────────────────────────────────────────────
-cat("\nRunning LSD & CV analysis for all datasets...\n\n")
+# ── Automatic File Detection ──────────────────────────────────
+cat("\nScanning 'data/' folder for all datasets...\n")
 
-for (f in files) {
-  run_analysis(f$csv, f$title, f$out)
+csv_files <- list.files("data", pattern = "\\.csv$", full.names = TRUE)
+
+if (length(csv_files) == 0) {
+  stop("No CSV files found in the 'data/' folder!")
 }
 
-cat("\nAll results saved to the Results/ folder.\n")
+cat(sprintf("Found %d files. Starting analysis...\n\n", length(csv_files)))
+
+# ── Run all ──────────────────────────────────────────────────
+for (csv_path in csv_files) {
+  
+  # Generate Title and Output Filename automatically
+  file_name <- basename(csv_path)
+  base_name <- sub("\\.csv$", "", file_name)
+  
+  title_name <- toupper(sub("-Table 1$", "", base_name))
+  output_path <- file.path("Results", paste0(base_name, "_LSD_CV.txt"))
+  
+  # Run the analysis
+  run_analysis(csv_path, title_name, output_path)
+}
+
+cat("\nAll analyses complete! Check the 'Results/' folder.\n")
